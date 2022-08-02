@@ -91,3 +91,9 @@ variable "skip_failing_bats_tests" {
   type        = string
   default     = "false"
 }
+
+variable "local_build_target" {
+  description = "Which make build target(s) to use for the local builder variant"
+  type        = string
+  default     = "build-ui build"
+}

@@ -78,10 +78,10 @@ fi
 echo "==> Results:"
 ls -hl bin/
 
-# Print the version output for just linux_amd64.
-# Since we run this script in CI, and our CI build jobs run on linux runners, 
-# We can only check the version output for a subset of builds
+# Maybe print the version output for just linux_amd64.
+# Since we run this script in CI, and our CI build jobs run on linux runners,
+# We can only check the version output for a subset of builds. We allow failure
+# here to handle cases of cross-compilation.
 if [ "${GOOS}" == "linux" ] && [ "${GOARCH}" == "amd64" ]; then
-    echo "==> Version Info:"
-    bin/boundary version
+    echo "==> Version Info: $(bin/boundary version)" || true
 fi
