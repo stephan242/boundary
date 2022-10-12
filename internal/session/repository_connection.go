@@ -7,11 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hashicorp/boundary/internal/kms"
-	"github.com/hashicorp/boundary/internal/observability/event"
-
 	"github.com/hashicorp/boundary/internal/db"
 	"github.com/hashicorp/boundary/internal/errors"
+	"github.com/hashicorp/boundary/internal/kms"
+	"github.com/hashicorp/boundary/internal/observability/event"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -108,8 +107,8 @@ func (r *ConnectionRepository) updateBytesUpBytesDown(ctx context.Context, conns
 				)
 				if err != nil {
 					// Returning an error will rollback the entire transaction.
-					// We don't want to bail out of an update batch if just of
-					// the connections fails to update, but we still log it.
+					// We don't want to bail out of an update batch if just one
+					// of the connections fails to update, but we still log it.
 					event.WriteError(ctx, op, fmt.Errorf("failed to update bytes up and down for connection id %q: %w", c.GetPublicId(), err))
 					continue
 				}

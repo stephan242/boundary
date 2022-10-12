@@ -37,7 +37,7 @@ func TestWorkerBytesUpDown(t *testing.T) {
 		PublicClusterAddr:         pl.Addr().String(),
 		StatusGracePeriodDuration: helper.DefaultGracePeriod,
 	})
-	defer c1.Shutdown()
+	t.Cleanup(c1.Shutdown)
 
 	expectWorkers(t, c1)
 
@@ -49,8 +49,8 @@ func TestWorkerBytesUpDown(t *testing.T) {
 		dawdle.WithWbufSize(256),
 	)
 	require.NoError(err)
-	defer proxy.Close()
 	require.NotEmpty(t, proxy.ListenerAddr())
+	t.Cleanup(func() { _ = proxy.Close() })
 
 	w1 := worker.NewTestWorker(t, &worker.TestWorkerOpts{
 		WorkerAuthKms:             c1.Config().WorkerAuthKms,
@@ -58,7 +58,7 @@ func TestWorkerBytesUpDown(t *testing.T) {
 		Logger:                    logger.Named("w1"),
 		StatusGracePeriodDuration: helper.DefaultGracePeriod,
 	})
-	defer w1.Shutdown()
+	t.Cleanup(w1.Shutdown)
 
 	require.NoError(w1.Worker().WaitForNextSuccessfulStatusUpdate())
 	require.NoError(c1.WaitForNextWorkerStatusUpdate(w1.Name()))
@@ -80,7 +80,7 @@ func TestWorkerBytesUpDown(t *testing.T) {
 	// Create test server, update default port on target
 	ts := helper.NewTestTcpServer(t)
 	require.NotNil(t, ts)
-	defer ts.Close()
+	t.Cleanup(ts.Close)
 	tgt, err = tcl.Update(ctx, tgt.Item.Id, tgt.Item.Version, targets.WithTcpTargetDefaultPort(ts.Port()), targets.WithSessionConnectionLimit(-1))
 	require.NoError(err)
 	require.NotNil(tgt)
