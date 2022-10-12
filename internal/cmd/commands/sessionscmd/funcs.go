@@ -237,12 +237,8 @@ func printItemTable(item *sessions.Session, resp *api.Response) string {
 		cm := map[string]interface{}{
 			"Client Address":   net.JoinHostPort(sc.ClientTcpAddress, strconv.FormatUint(uint64(sc.ClientTcpPort), 10)),
 			"Endpoint Address": net.JoinHostPort(sc.EndpointTcpAddress, strconv.FormatUint(uint64(sc.EndpointTcpPort), 10)),
-		}
-		if sc.BytesUp > 0 {
-			cm["Bytes Up"] = sc.BytesUp
-		}
-		if sc.BytesDown > 0 {
-			cm["Bytes Down"] = sc.BytesDown
+			"Bytes Up":         sc.BytesUp,
+			"Bytes Down":       sc.BytesDown,
 		}
 		if len(sc.ClosedReason) != 0 {
 			cm["Closed Reason"] = sc.ClosedReason
