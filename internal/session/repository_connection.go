@@ -101,8 +101,7 @@ func (r *ConnectionRepository) updateBytesUpBytesDown(ctx context.Context, conns
 					nil,
 					// The last update to these two fields should come from our
 					// connection closure logic, so we don't update here if the
-					// connection has already been closed. There's also a
-					// trigger on the database itself to prevent this.
+					// connection has already been closed.
 					db.WithWhere("closed_reason is null"),
 				)
 				if err != nil {
