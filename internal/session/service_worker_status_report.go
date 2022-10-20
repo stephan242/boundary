@@ -13,7 +13,7 @@ import (
 type StateReport struct {
 	SessionId   string
 	Status      Status
-	Connections []Connection
+	Connections []*Connection
 }
 
 // WorkerStatusReport is a domain service function that, given a Worker's
@@ -25,7 +25,7 @@ type StateReport struct {
 //  3. Checks for any orphaned connections, which is defined as a connection
 //     that is in an active state, but was not reported by worker. Any orphaned
 //     connections will be marked as closed.
-func WorkerStatusReport(ctx context.Context, repo *Repository, connRepo *ConnectionRepository, workerId string, report []StateReport) ([]StateReport, error) {
+func WorkerStatusReport(ctx context.Context, repo *Repository, connRepo *ConnectionRepository, workerId string, report []*StateReport) ([]*StateReport, error) {
 	const op = "session.WorkerStatusReport"
 
 	reportedConnectionIds := make([]string, 0)
@@ -35,7 +35,7 @@ func WorkerStatusReport(ctx context.Context, repo *Repository, connRepo *Connect
 		reportedSessions = append(reportedSessions, r.SessionId)
 		for _, c := range r.Connections {
 			reportedConnectionIds = append(reportedConnectionIds, c.GetPublicId())
-			reportedConnections = append(reportedConnections, &c)
+			reportedConnections = append(reportedConnections, c)
 		}
 	}
 
